@@ -36,3 +36,9 @@ User.find()
 res.render('view_name');
 ```
 
+# NPM
+## Update All Package
+```js
+ncu -a
+npm install
+```
