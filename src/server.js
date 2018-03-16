@@ -7,20 +7,18 @@ var bodyParser   = require('body-parser');
 var mongoose     = require('mongoose');
 var debug        = require('debug')('node-rest:server');
 var http         = require('http');
-var applicationRoutes    = require('./routes/application');
+var routes       = require('./routes/application');
 var app = express();
 mongoose.connect('mongodb://localhost:27017/seed_db');
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,7 +27,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use('/', applicationRoutes);
+app.use('/', routes);
 app.use((req, res, next) => {
   return res.send({ error: 'Undefined route' });
 });
@@ -50,29 +48,27 @@ server.on('error', (error) => {
     throw error;
   }
   var bind = typeof port === 'string'
-  ? 'Pipe ' + port
-  : 'Port ' + port;
+    ? 'Pipe ' + port
+    : 'Port ' + port;
   switch (error.code) {
     case 'EACCES':
-    console.error(bind + ' requires elevated privileges');
-    process.exit(1);
-    break;
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
     case 'EADDRINUSE':
-    console.error(bind + ' is already in use');
-    process.exit(1);
-    break;
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
     default:
-    throw error;
+      throw error;
   }
 });
-
-var dbg = debug('node-rest:server');
 
 server.on('listening', () => {
   var addr = server.address();
   var bind = typeof addr === 'string'
-  ? 'pipe ' + addr
-  : 'port ' + addr.port;
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
   debug('Listening on ' + bind);
 });
 
