@@ -10,7 +10,7 @@ req.query
 # Mongoose
 ## New Model
 ```js
-let user = new User({ email: 'me.feghhi@gmail.com', password: 'dingdong' });
+let user = new User({ email: 'me.feghhi@gmail.com', password: 'password' });
 ```
 ## Save Model
 ```js
